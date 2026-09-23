@@ -1,0 +1,16 @@
+# ── core ML ──────────────────────────────────────────────────────────────────
+torch>=2.1.0
+sentence-transformers>=2.7.0
+faiss-cpu>=1.7.4           # swap for faiss-gpu if you have a CUDA GPU
+scikit-learn>=1.4.0
+numpy>=1.26.0
+pandas>=2.1.0
+
+# ── web / API ─────────────────────────────────────────────────────────────────
+flask>=3.0.0
+flask-cors>=4.0.0
+requests>=2.31.0
+
+# ── utilities ─────────────────────────────────────────────────────────────────
+tqdm>=4.66.0
+feedparser>=6.0.0

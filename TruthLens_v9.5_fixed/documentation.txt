@@ -1,0 +1,38 @@
+TruthLens — Ultimate Expert Verification System (v8.0)
+=====================================================
+
+TruthLens is a production-grade, AI-powered news verification dashboard that combines stylized pattern recognition (ANN) with real-time global evidence gathering (RAG).
+
+1. DUAL-ENGINE ARCHITECTURE
+---------------------------
+TruthLens uses an 'Evidence-First' approach (75% RAG / 25% ANN):
+- ANN (Stylistic IQ): Analyzes the tone, rhetoric, and linguistic patterns of a claim to identify sensationlism or misinformation patterns.
+- RAG (Evidence Power): Performs real-time retrieval from 25+ global and national news sources (BBC, Reuters, Hindu, Times of India, etc.) to find factual corroboration.
+
+2. ADVANCED PRECISION FEATURES
+------------------------------
+- DEEP ARTICLE INSPECTION : TruthLens visits the actual URL of top news matches to "read" the full body text (1500+ characters). This prevents vague headlines from misleading the verdict.
+- CROSS-SOURCE CONSENSUS : If multiple Tier-1 international and national sources agree on a fact, the system marks the result as "CONSENSUS VERIFIED" with a massive confidence boost.
+- TEMPORAL PRECISION : Every news article is timestamped. The system understands time-sensitive queries like "today" or "yesterday" and penalizes stale news (>24h) by 90%.
+- LOCATION-AWARE MATC HING : TruthLens separates "A in Mumbai" from "A in Hyderabad." It enforces a strict location intersection to prevent incorrect regional results.
+
+3. SOURCE RANKING (TIERS)
+-------------------------
+Sources are ranked for trustworthiness:
+- Tier 1: Global/National Authorities (BBC, Reuters, Al Jazeera, The Hindu, AP, NDTV).
+- Tier 2: Regional/Specialized (Telangana Today, Siasat Daily, Weather.com).
+- Tier 3: General Blogs and Web results.
+
+4. UI & VISUALIZATION
+---------------------
+- ONYX GLASS DASHBOARD: A high-end, dark-mode dashboard with neon accents.
+- ANALYTICS BREAKDOWN: Real-time progress bars showing exactly how the AI and the Evidence contributed to the final verdict.
+- EVIDENCE CARDS: Interactive cards with favicons, match-type badges, and "Time-Ago" freshness indicators.
+
+5. HOW TO RUN
+-------------
+1. Ensure Python 3.8+ is installed.
+2. Run 'python app.py' to start the server.
+3. Visit 'http://127.0.0.1:5010' in your browser.
+
+TRUTHLENS: VERIFYING TRUTH IN EVERY WORD.

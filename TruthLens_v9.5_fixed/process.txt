@@ -1,0 +1,48 @@
+# TruthLens v9.0 — Technical Process Architecture
+
+TruthLens is a multi-stage verification platform that combines writing-pattern recognition (ANN) with real-time news retrieval (RAG). Below is the complete data flow.
+
+## 1. System Initialization
+- **ML Models**: Loads the `all-MiniLM-L6-v2` sentence encoder and the trained `FakeNewsANN` weights (`ann.pth`).
+- **RAG Indexing**:
+    - Scrapes 15+ trusted RSS feeds (BBC, Reuters, The Hindu, NDTV, and local Telangana sources).
+    - Embeds each article into a 384-dimensional vector space.
+    - Stores articles in a high-performance **FAISS Vector Index** (FlatIP) for cosine similarity matching.
+- **Background Refresh**: A daemon thread re-refreshes the entire index every 5 to 600 seconds (configurable) to keep news current.
+
+## 2. Prediction Pipeline (Execution Flow)
+When a user submits a "Claim" for verification:
+
+### Phase A: Linguistic Decomposition (`analyzer.py`)
+- **Metadata Tagging**: Detects Topic (Sports, Weather, Politics), Location (Hyderabad, Telangana, Global), and Temporal context (Today, Yesterday).
+- **Style Scoring**: Checks for sensationalism (clickbait keywords), attribution (existence of "source says"), and "hard-hit" disinformation patterns.
+
+### Phase B: Hybrid Scoring
+1. **The ANN (Writing Style Pattern)**:
+   - The claim is embedded and passed through a 5-layer Artificial Neural Network.
+   - It outputs an "ANN_FAKENESS" score (0 to 1) based purely on the grammatical and stylistic structure of the text.
+2. **The RAG (Evidence-Based Search)**:
+   - The claim is vector-searched against the FAISS index.
+   - **Local Match**: If matches exist, it calculates a similarity score.
+   - **Live Fallback**: If the local index score is low (< 0.60), the system triggers a real-time scrap of **Google News RSS** to find the absolute latest reports.
+
+### Phase C: Re-Ranking & Consensus
+- **Entity Matching**: Penalizes results if the location/topic doesn't match the query.
+- **Authority Weighting**: Articles from Tier-1 sources (BBC, Reuters) receive a similarity boost.
+- **Consensus Logic**: If 2+ Tier-1 sources report the same event with high similarity, a `CONSENSUS_VERIFIED` override is triggered.
+
+## 3. Verdict Generation
+The final confidence is a weighted average:
+`Score = (RAG_Similarity * 60%) + ((1 - ANN_Fake) * 40%)`
+
+- **REAL**: Score >= 0.72 (or Consensus found)
+- **LIKELY REAL**: Score >= 0.58
+- **UNCERTAIN**: Score >= 0.44
+- **LIKELY FAKE**: Score >= 0.28
+- **FAKE**: Score < 0.28 (or Hard-hit disinformation alert)
+
+## 4. Response
+The system returns a detailed JSON response containing:
+- **Verdict & Confidence**: The final rating.
+- **Reasoning**: Plain-english explanation of WHY it gave that rating.
+- **Evidence Panel**: A list of the top similar articles found, including source logos and timestamps.
